@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOGETHER API Usage Guide</title>
+</head>
+<body>
+    <h1>TOGETHER API Usage Guide POWERED BY MISTRAL</h1>
+    
+    <h2>How to Use the API</h2>
+    <ol>
+        <li>Make a GET request to the root endpoint '/' to check if the API is running:
+            <pre>GET /</pre>
+            <p>Response: 'Together Api'</p>
+        </li>
+        
+        <li>Make a GET request to '/together' with a 'text' query parameter to get a completion based on user input:
+            <pre>GET /together?text=YourInputTextHere</pre>
+            <p>Response: Completion message based on user input</p>
+        </li>
+    </ol>
+</body>
+</html>
