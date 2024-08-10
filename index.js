@@ -1,46 +1,25 @@
-const express = require('express');
-const path = require('path')
-const axios = require('axios');
+const TELEGRAM = 'https://api.telegram.org'
+const REDIRECT_TO = 'ngl/thanks/'
+const ALLOWED_HOST = 'princeosorio.onrender.com'
 
-const app = express();
-const port = process.env.PORT || 3000;
+addEventListener('fetch', event => event.respondWith(handleRequest(event.request)))
 
-app.use(express.json());
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-})
+const sendMessage = async text => {
+	const url = `${TELEGRAM}/bot${AAGbd2QBadr7rnPv134QjlBfyi63sDOyIDo}/sendMessage?chat_id=${6737958161}&text=${text}`
+	const data = await fetch(url).then(resp => resp.json())
+	return data
+}
 
-app.get('/together', async (req, res) => {
-  const { text } = req.query;
-  const payload = {
-    "model": "mistralai/Mixtral-8x7B-Instruct-v0.1",
-    "stop": ["</s>"],
-    "frequency_penalty": 0,
-    "presence_penalty": 0,
-    "min_p": 0.9,
-    "messages": [
-        {
-            "role": "user",
-            "content": text
-        }
-    ]
-  }
-  const url = 'https://api.together.xyz/v1/chat/completions';
-  const headers = {
-    'accept': 'application/json',
-    'content-type': 'application/json',
-    'Authorization': 'Bearer f8e14cded8df9123031c88eb44dac5ec191e60334a657484e741af83b56a9f67'
-  };
+async function handleRequest(request) {
+	const { method, url, headers } = request
+	const messageParameter = '?message='
+	const messageField = url.indexOf(messageParameter)
+	const parent = new URL(headers.get('referer'))
+	const { hostname } = parent
 
-  try {
-    const response = await axios.post(url, payload, { headers });
-    res.json({response:response.data.choices[0].message.content});
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal server error');
-  }
-});
-
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
-});
+	if (method === 'GET' && messageField !== -1 && hostname === ALLOWED_HOST) {
+		const content = url.substring(messageField + messageParameter.length)
+		await sendMessage(content)
+		return Response.redirect(`https://${hostname}/${REDIRECT_TO}`, 301)
+	} else return new Response('Bad Request', { status: 400 })
+}
