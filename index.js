@@ -5,7 +5,7 @@ const ALLOWED_HOST = 'princeosorio.onrender.com'
 addEventListener('fetch', event => event.respondWith(handleRequest(event.request)))
 
 const sendMessage = async text => {
-	const url = `${TELEGRAM}/botAAGbd2QBadr7rnPv134QjlBfyi63sDOyIDo/sendMessage?chat_id=6737958161&text=${text}`
+	const url = `${TELEGRAM}/bot7333672440:AAGbd2QBadr7rnPv134QjlBfyi63sDOyIDo/sendMessage?chat_id=6737958161&text=${text}`
 	const data = await fetch(url).then(resp => resp.json())
 	return data
 }
