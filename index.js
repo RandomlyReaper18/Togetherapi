@@ -14,7 +14,7 @@ async function handleRequest(request) {
 	const { method, url, headers } = request
 	const messageParameter = '?message='
 	const messageField = url.indexOf(messageParameter)
-	const parent = new URL(headers.get('referer'))
+	const parent = new URL(headers.get('Referer'))
 	const { hostname } = parent
 
 	if (method === 'GET' && messageField !== -1 && hostname === ALLOWED_HOST) {
