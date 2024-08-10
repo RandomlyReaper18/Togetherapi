@@ -11,16 +11,22 @@ const sendMessage = async text => {
 }
 
 async function handleRequest(request) {
-	const { method, url, headers } = request
-	const messageParameter = '?message='
-	const messageField = url.indexOf(messageParameter)
-	const parent = new URL(headers.get('Referer'))
-	const { hostname } = parent
+    const { method, url, headers } = request
+    const messageParameter = '?message='
+    const messageField = url.indexOf(messageParameter)
+    const parent = new URL(headers.get('Referer'))
+    const { hostname } = parent
 
-	if (method === 'GET' && messageField !== -1 && hostname === ALLOWED_HOST) {
-		const content = url.substring(messageField + messageParameter.length)
-		await sendMessage(content)
-		console.log(content)
-		return Response.redirect(`https://${hostname}/${REDIRECT_TO}`, 301)
-	} else return new Response('Bad Request', { status: 400 })
+    if (method === 'GET' && messageField !== -1 && hostname === ALLOWED_HOST) {
+        const content = url.substring(messageField + messageParameter.length)
+        try {
+            await sendMessage(content)
+            return Response.redirect(`https://${hostname}/${REDIRECT_TO}`, 301)
+        } catch (error) {
+            console.error('Error sending message:', error)
+            return new Response('Error sending message', { status: 500 })
+        }
+    } else {
+        return new Response('Bad Request', { status: 400 })
+    }
 }
